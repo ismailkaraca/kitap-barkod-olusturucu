@@ -6,6 +6,14 @@ papaParseScript.src = "https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/pa
 papaParseScript.async = true;
 document.head.appendChild(papaParseScript);
 
+// Gerekli kütüphaneleri yüklemek için script etiketleri ekliyoruz.
+
+const tailwindScript = document.createElement('script');
+
+tailwindScript.src = "https://cdn.tailwindcss.com";
+
+document.head.appendChild(tailwindScript);
+
 const sheetJsScript = document.createElement('script');
 sheetJsScript.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
 sheetJsScript.async = true;
