@@ -127,7 +127,6 @@ function App() {
   const [logoSize, setLogoSize] = React.useState(7);
 
   // YENİ EKLENEN STATE'LER
-  const [isDarkMode, setIsDarkMode] = React.useState(false);
   const [customTemplates, setCustomTemplates] = React.useState({});
   const [newTemplateName, setNewTemplateName] = React.useState("");
   const [startBarcode, setStartBarcode] = React.useState("");
@@ -140,8 +139,6 @@ function App() {
   const tableHeaders = [ { key: 'barcode', label: 'Barkod' }, { key: 'title', label: 'Başlık' }, { key: 'author', label: 'Yazar' }, { key: 'itemcallnumber', label: 'Yer Numarası' }, { key: 'itemtype', label: 'Materyal Türü' }, { key: 'location', label: 'Bölümü' }];
   const itemsPerPage = React.useMemo(() => Math.max(1, settings.numCols * settings.numRows), [settings.numCols, settings.rows]);
   // --- EFFECT'LER ---
-  React.useEffect(() => { document.documentElement.classList.toggle('dark', isDarkMode); }, [isDarkMode]);
-
   React.useEffect(() => {
     try {
       const saved = localStorage.getItem('kohaLabelMaker_customTemplates');
@@ -300,66 +297,63 @@ function App() {
   return (
     <>
       <style>{`.no-print { display: block; } #print-area { display: block; } @media print { body * { visibility: hidden; } .no-print { display: none; } #print-area, #print-area * { visibility: visible; } #print-area { position: absolute; left: 0; top: 0; width: 100% !important; height: 100% !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; border: none !important; } }`}</style>
-      <div className="bg-slate-100 dark:bg-slate-900 min-h-screen text-slate-800 dark:text-slate-200 font-sans p-4 sm:p-6 lg:p-8">
+      <div className="bg-slate-100 min-h-screen text-slate-800 font-sans p-4 sm:p-6 lg:p-8">
         <div className="max-w-screen-2xl mx-auto">
           <header className="mb-8 no-print flex justify-between items-center">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Kitap Barkod Oluşturucu</h1>
-                    <p className="text-slate-600 dark:text-slate-400 mt-1">Veri yükleyin, barkod seçin ve etiket şablonunuzu oluşturun.</p>
+                    <h1 className="text-3xl font-bold text-slate-900">Kitap Barkod Oluşturucu</h1>
+                    <p className="text-slate-600 mt-1">Veri yükleyin, barkod seçin ve etiket şablonunuzu oluşturun.</p>
                 </div>
-                <button onClick={() => setIsDarkMode(p => !p)} className="p-2 rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition-colors">
-                    {isDarkMode ? '☀️' : '🌙'}
-                </button>
             </header>
           <div className="flex flex-col gap-8">
-            <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm no-print">
-                <h3 className="font-bold border-b pb-2 mb-3 dark:border-slate-600">1. Veri Dosyası Yükle</h3>
-                <input type="file" accept=".csv, .xlsx, .xls" onChange={handleFileChange} className="text-sm w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200 dark:hover:file:bg-blue-800"/>
-                {fileName && <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Yüklendi: {fileName} ({allData.length} kayıt)</p>}
+            <div className="bg-white p-4 rounded-lg shadow-sm no-print">
+                <h3 className="font-bold border-b pb-2 mb-3">1. Veri Dosyası Yükle</h3>
+                <input type="file" accept=".csv, .xlsx, .xls" onChange={handleFileChange} className="text-sm w-full file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/>
+                {fileName && <p className="text-sm text-gray-500 mt-2">Yüklendi: {fileName} ({allData.length} kayıt)</p>}
                 {errorMessage && <p className="text-sm text-red-500 mt-2">{errorMessage}</p>}
             </div>
 
             {allData.length > 0 && (
-            <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm no-print">
-                <h3 className="font-bold border-b pb-2 mb-3 dark:border-slate-600">2. Materyal Seçimi ({selectedBarcodes.size})</h3>
+            <div className="bg-white p-4 rounded-lg shadow-sm no-print">
+                <h3 className="font-bold border-b pb-2 mb-3">2. Materyal Seçimi ({selectedBarcodes.size})</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <h4 className="font-semibold text-sm mb-2">Aralığa Göre Seç</h4>
                         <div className="flex items-center gap-2">
-                           <input type="text" placeholder="Başlangıç Barkodu" value={startBarcode} onChange={e => setStartBarcode(e.target.value)} className="w-full p-2 border rounded-md text-sm dark:bg-slate-700 dark:border-slate-600" />
-                           <input type="text" placeholder="Bitiş Barkodu" value={endBarcode} onChange={e => setEndBarcode(e.target.value)} className="w-full p-2 border rounded-md text-sm dark:bg-slate-700 dark:border-slate-600" />
-                           <button onClick={handleSelectByRange} className="px-4 py-2 border rounded text-sm bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600">Seç</button>
+                           <input type="text" placeholder="Başlangıç Barkodu" value={startBarcode} onChange={e => setStartBarcode(e.target.value)} className="w-full p-2 border rounded-md text-sm" />
+                           <input type="text" placeholder="Bitiş Barkodu" value={endBarcode} onChange={e => setEndBarcode(e.target.value)} className="w-full p-2 border rounded-md text-sm" />
+                           <button onClick={handleSelectByRange} className="px-4 py-2 border rounded text-sm bg-slate-50 hover:bg-slate-100">Seç</button>
                         </div>
                     </div>
                     <div>
                         <h4 className="font-semibold text-sm mb-2">Gruplara Göre Seç</h4>
                         <div className="flex items-center gap-2">
-                           <select defaultValue="" onChange={handleLocationSelect} className="w-full p-2 border rounded-md text-sm bg-white dark:bg-slate-700 dark:border-slate-600" disabled={uniqueLocations.length === 0}><option value="">Bölüme Göre...</option>{uniqueLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}</select>
-                           <select defaultValue="" onChange={handleDeweySelect} className="w-full p-2 border rounded-md text-sm bg-white dark:bg-slate-700 dark:border-slate-600"><option value="">Yer Numarasına Göre...</option>{Object.entries(deweyCategories).map(([key, value]) => key && <option key={key} value={key}>{value}</option>)}</select>
+                           <select defaultValue="" onChange={handleLocationSelect} className="w-full p-2 border rounded-md text-sm bg-white" disabled={uniqueLocations.length === 0}><option value="">Bölüme Göre...</option>{uniqueLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}</select>
+                           <select defaultValue="" onChange={handleDeweySelect} className="w-full p-2 border rounded-md text-sm bg-white"><option value="">Yer Numarasına Göre...</option>{Object.entries(deweyCategories).map(([key, value]) => key && <option key={key} value={key}>{value}</option>)}</select>
                         </div>
                     </div>
                 </div>
                 <div className="flex flex-wrap items-center justify-between gap-y-2 gap-x-4 my-4">
-                  <div className="flex items-center gap-2"><button onClick={handleSelectAllFiltered} className="px-3 py-1 border rounded text-sm bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600 dark:border-slate-600">Tümünü Seç</button><button onClick={handleDeselectAllFiltered} className="px-3 py-1 border rounded text-sm bg-red-50 text-red-700 hover:bg-red-100 dark:bg-red-900/50 dark:text-red-300 dark:hover:bg-red-900 dark:border-red-800">Tüm Seçimi Kaldır</button></div>
-                  <div className="flex items-center gap-2"><button onClick={handleSelectPage} className="px-3 py-1 border rounded text-sm bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600 dark:border-slate-600">Sayfayı Seç</button><button onClick={handleDeselectPage} className="px-3 py-1 border rounded text-sm bg-red-50 text-red-700 hover:bg-red-100 dark:bg-red-900/50 dark:text-red-300 dark:hover:bg-red-900 dark:border-red-800">Sayfa Seçimini Kaldır</button></div>
+                  <div className="flex items-center gap-2"><button onClick={handleSelectAllFiltered} className="px-3 py-1 border rounded text-sm bg-slate-50 hover:bg-slate-100">Tümünü Seç</button><button onClick={handleDeselectAllFiltered} className="px-3 py-1 border rounded text-sm bg-red-50 text-red-700 hover:bg-red-100">Tüm Seçimi Kaldır</button></div>
+                  <div className="flex items-center gap-2"><button onClick={handleSelectPage} className="px-3 py-1 border rounded text-sm bg-slate-50 hover:bg-slate-100">Sayfayı Seç</button><button onClick={handleDeselectPage} className="px-3 py-1 border rounded text-sm bg-red-50 text-red-700 hover:bg-red-100">Sayfa Seçimini Kaldır</button></div>
                 </div>
-                <input type="text" placeholder="Veriler içinde ara..." value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }} className="w-full p-2 border rounded-md text-sm mb-3 dark:bg-slate-700 dark:border-slate-600" />
-                <div className="overflow-x-auto"><table className="w-full text-left text-sm"><thead><tr className="bg-slate-50 dark:bg-slate-700">{['', ...tableHeaders].map((header, idx) => (<th key={idx} className="p-2 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 select-none" onClick={() => idx > 0 && requestSort(header.key)}>{header.label || ''}{idx > 0 && sortConfig.key === header.key && <span className="ml-1 text-xs">{sortConfig.direction === 'ascending' ? '▲' : '▼'}</span>}</th>))}</tr></thead><tbody>{paginatedData.map(item => (<tr key={item.barcode} className="border-b dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50"><td className="p-2"><input type="checkbox" checked={selectedBarcodes.has(item.barcode)} onChange={(e) => updateSelection([item.barcode], e.target.checked)} className="dark:bg-slate-900 dark:border-slate-600"/></td>{tableHeaders.map(header => (<td key={`${item.barcode}-${header.key}`} className={`p-2 ${header.key === 'barcode' ? 'font-mono' : ''}`}>{item[header.key]}</td>))}</tr>))}</tbody></table></div>
-                <div className="flex justify-between items-center mt-3 text-sm"><button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="px-3 py-1 border rounded disabled:opacity-50 dark:border-slate-600">Önceki</button><span>{currentPage} / {Math.ceil(sortedData.length / itemsPerPage) || 1}</span><button onClick={() => setCurrentPage(p => Math.min(Math.ceil(sortedData.length / itemsPerPage), p + 1))} disabled={currentPage * itemsPerPage >= sortedData.length} className="px-3 py-1 border rounded disabled:opacity-50 dark:border-slate-600">Sonraki</button></div>
+                <input type="text" placeholder="Veriler içinde ara..." value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }} className="w-full p-2 border rounded-md text-sm mb-3" />
+                <div className="overflow-x-auto"><table className="w-full text-left text-sm"><thead><tr className="bg-slate-50">{['', ...tableHeaders].map((header, idx) => (<th key={idx} className="p-2 cursor-pointer hover:bg-slate-100 select-none" onClick={() => idx > 0 && requestSort(header.key)}>{header.label || ''}{idx > 0 && sortConfig.key === header.key && <span className="ml-1 text-xs">{sortConfig.direction === 'ascending' ? '▲' : '▼'}</span>}</th>))}</tr></thead><tbody>{paginatedData.map(item => (<tr key={item.barcode} className="border-b hover:bg-slate-50"><td className="p-2"><input type="checkbox" checked={selectedBarcodes.has(item.barcode)} onChange={(e) => updateSelection([item.barcode], e.target.checked)} className=""/></td>{tableHeaders.map(header => (<td key={`${item.barcode}-${header.key}`} className={`p-2 ${header.key === 'barcode' ? 'font-mono' : ''}`}>{item[header.key]}</td>))}</tr>))}</tbody></table></div>
+                <div className="flex justify-between items-center mt-3 text-sm"><button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="px-3 py-1 border rounded disabled:opacity-50">Önceki</button><span>{currentPage} / {Math.ceil(sortedData.length / itemsPerPage) || 1}</span><button onClick={() => setCurrentPage(p => Math.min(Math.ceil(sortedData.length / itemsPerPage), p + 1))} disabled={currentPage * itemsPerPage >= sortedData.length} className="px-3 py-1 border rounded disabled:opacity-50">Sonraki</button></div>
             </div>
             )}
             
-            <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm no-print">
-                <h3 className="font-bold border-b pb-2 mb-3 dark:border-slate-600">3. Etiket Ayarları</h3>
+            <div className="bg-white p-4 rounded-lg shadow-sm no-print">
+                <h3 className="font-bold border-b pb-2 mb-3">3. Etiket Ayarları</h3>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div className="lg:col-span-2">
                         <div className="grid md:grid-cols-2 gap-6">
                            <div>
                                 <h4 className="font-semibold text-sm mb-2">Etiket İçeriği</h4>
-                                <p className="text-xs text-slate-500 dark:text-slate-400 mb-2">En fazla 3 öğe seçin.</p>
+                                <p className="text-xs text-slate-500 mb-2">En fazla 3 öğe seçin.</p>
                                 <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-3">
                                   {availableFields.map(field => ( <label key={field.key} className="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" value={field.key} checked={labelFields.includes(field.key)} onChange={handleFieldSelection} disabled={!labelFields.includes(field.key) && labelFields.length >= 3} className="disabled:opacity-50"/><span className="truncate">{field.label}</span></label>))}
-                                  <div className="col-span-2 mt-2 pt-2 border-t dark:border-slate-600">
+                                  <div className="col-span-2 mt-2 pt-2 border-t">
                                       <label className="flex items-center space-x-2 text-sm cursor-pointer">
                                           <input type="checkbox" value="customText" checked={labelFields.includes('customText')} onChange={handleFieldSelection} disabled={!labelFields.includes('customText') && labelFields.length >= 3} className="disabled:opacity-50"/>
                                           <span className="font-medium">Özel Metin Ekle</span>
@@ -370,62 +364,62 @@ function App() {
                                               value={customText}
                                               onChange={e => setCustomText(e.target.value)}
                                               placeholder="Etikete eklenecek özel metni girin..."
-                                              className="w-full mt-2 p-2 border rounded-md text-sm dark:bg-slate-700 dark:border-slate-600"
+                                              className="w-full mt-2 p-2 border rounded-md text-sm"
                                           />
                                       )}
                                   </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-3 mb-4">
-                                    <div><label className="text-xs font-medium block mb-1">Hizalama</label><select value={textAlign} onChange={(e) => setTextAlign(e.target.value)} className="w-full p-2 border rounded-md text-sm dark:bg-slate-700 dark:border-slate-600"><option value="left">Sola</option><option value="center">Orta</option><option value="right">Sağa</option></select></div>
-                                    <div><label className="text-xs font-medium block mb-1">Yazı Boyutu (pt)</label><input type="number" value={fontSize} onChange={(e) => setFontSize(Number(e.target.value))} className="w-full p-2 border rounded-md text-sm dark:bg-slate-700 dark:border-slate-600"/></div>
-                                    <div><label className="text-xs font-medium block mb-1">Yazı Tipi</label><select value={fontFamily} onChange={(e) => setFontFamily(e.target.value)} className="w-full p-2 border rounded-md text-sm dark:bg-slate-700 dark:border-slate-600"><option value="sans-serif">Sans-Serif</option><option value="serif">Serif</option><option value="monospace">Monospace</option></select></div>
-                                    <div><label className="text-xs font-medium block mb-1">Barkod Tipi</label><select value={barcodeFormat} onChange={(e) => setBarcodeFormat(e.target.value)} className="w-full p-2 border rounded-md text-sm dark:bg-slate-700 dark:border-slate-600"><option value="CODE128">Barkod (CODE128)</option><option value="QR">QR Kod</option></select></div>
+                                    <div><label className="text-xs font-medium block mb-1">Hizalama</label><select value={textAlign} onChange={(e) => setTextAlign(e.target.value)} className="w-full p-2 border rounded-md text-sm"><option value="left">Sola</option><option value="center">Orta</option><option value="right">Sağa</option></select></div>
+                                    <div><label className="text-xs font-medium block mb-1">Yazı Boyutu (pt)</label><input type="number" value={fontSize} onChange={(e) => setFontSize(Number(e.target.value))} className="w-full p-2 border rounded-md text-sm"/></div>
+                                    <div><label className="text-xs font-medium block mb-1">Yazı Tipi</label><select value={fontFamily} onChange={(e) => setFontFamily(e.target.value)} className="w-full p-2 border rounded-md text-sm"><option value="sans-serif">Sans-Serif</option><option value="serif">Serif</option><option value="monospace">Monospace</option></select></div>
+                                    <div><label className="text-xs font-medium block mb-1">Barkod Tipi</label><select value={barcodeFormat} onChange={(e) => setBarcodeFormat(e.target.value)} className="w-full p-2 border rounded-md text-sm"><option value="CODE128">Barkod (CODE128)</option><option value="QR">QR Kod</option></select></div>
                                 </div>
                                 <label className="flex items-center space-x-2 text-sm cursor-pointer"><input type="checkbox" checked={isFirstLineBold} onChange={e => setIsFirstLineBold(e.target.checked)} /><span>İlk satır kalın olsun</span></label>
                             </div>
                             <div>
                                 <h4 className="font-semibold text-sm mb-2">Logo</h4>
-                                <div className="flex items-center space-x-2 text-sm mb-2"><input type="checkbox" id="ministryLogoCheck" checked={useMinistryLogo} onChange={handleMinistryLogoToggle} className="h-4 w-4 rounded border-gray-300 dark:border-slate-600 text-blue-600 focus:ring-blue-500"/><label htmlFor="ministryLogoCheck" className="cursor-pointer select-none">Bakanlık Logosunu Kullan</label></div>
+                                <div className="flex items-center space-x-2 text-sm mb-2"><input type="checkbox" id="ministryLogoCheck" checked={useMinistryLogo} onChange={handleMinistryLogoToggle} className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"/><label htmlFor="ministryLogoCheck" className="cursor-pointer select-none">Bakanlık Logosunu Kullan</label></div>
                                 <div className="grid grid-cols-2 gap-3">
-                                    <div><label className="text-xs font-medium block mb-1">...veya Özel Logo Yükle</label><input type="file" accept="image/*" onChange={handleLogoChange} className="text-xs w-full file:mr-2 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-200 dark:hover:file:bg-blue-800"/></div>
-                                    <div><label className="text-xs font-medium block mb-1">Logo Yüksekliği (mm)</label><input type="number" value={logoSize} onChange={(e) => setLogoSize(Number(e.target.value))} className="w-full p-2 border rounded-md text-sm dark:bg-slate-700 dark:border-slate-600"/></div>
+                                    <div><label className="text-xs font-medium block mb-1">...veya Özel Logo Yükle</label><input type="file" accept="image/*" onChange={handleLogoChange} className="text-xs w-full file:mr-2 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"/></div>
+                                    <div><label className="text-xs font-medium block mb-1">Logo Yüksekliği (mm)</label><input type="number" value={logoSize} onChange={(e) => setLogoSize(Number(e.target.value))} className="w-full p-2 border rounded-md text-sm"/></div>
                                 </div>
-                                {logo && <img src={logo} alt="Logo Önizleme" className="mt-2 max-h-12 border p-1 rounded dark:border-slate-600 bg-white" />}
+                                {logo && <img src={logo} alt="Logo Önizleme" className="mt-2 max-h-12 border p-1 rounded bg-white" />}
                             </div>
                         </div>
                     </div>
                     <div>
                         <h4 className="font-semibold text-sm mb-2">Canlı Önizleme</h4>
-                        <div className="p-2 bg-slate-200 dark:bg-slate-700 rounded-md">
+                        <div className="p-2 bg-slate-200 rounded-md">
                            <div style={{ transform: 'scale(1.5)', transformOrigin: 'top left', minHeight: `${settings.labelHeight * 1.5 + 10}px`}}>
-                                <div className="border border-dashed border-gray-400 dark:border-gray-500 overflow-hidden box-border bg-white" style={{ width: `${settings.labelWidth}mm`, height: `${settings.labelHeight}mm` }}>
+                                <div className="border border-dashed border-gray-400 overflow-hidden box-border bg-white" style={{ width: `${settings.labelWidth}mm`, height: `${settings.labelHeight}mm` }}>
                                    {renderSingleLabel(labelsToPrint[0], 'preview')}
                                 </div>
                            </div>
                         </div>
                     </div>
                 </div>
-                <div className="grid md:grid-cols-2 gap-6 mt-6 border-t pt-4 dark:border-slate-600">
+                <div className="grid md:grid-cols-2 gap-6 mt-6 border-t pt-4">
                     <div>
                         <h4 className="font-semibold text-sm mb-2">Sayfa Yerleşimi</h4>
-                        <select value={selectedTemplateKey} onChange={(e) => loadTemplate(e.target.value)} className="w-full p-2 border rounded-md text-sm mb-2 dark:bg-slate-700 dark:border-slate-600"><option value="system4">Sistem 4'lü</option><option value="system3">Sistem 3'lü</option><option value="custom">Özel</option>{Object.keys(customTemplates).length > 0 && <option value="load_custom" disabled>--- Kayıtlı Şablonlar ---</option>}{Object.keys(customTemplates).map(name => <option key={name} value={name}>{name}</option>)}</select>
-                        {selectedTemplateKey === 'custom' && (<div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm border-t pt-2 dark:border-slate-600">{Object.keys(settings).filter(k => k !== 'name' && k !== 'unit').map(key => (<label key={key}>{settingLabels[key] || key} ({settings.unit}): <input type="number" value={settings[key]} onChange={e=>handleSettingChange(key, e.target.value)} className="w-full p-1 border rounded dark:bg-slate-700 dark:border-slate-600"/></label>))}</div>)}
+                        <select value={selectedTemplateKey} onChange={(e) => loadTemplate(e.target.value)} className="w-full p-2 border rounded-md text-sm mb-2"><option value="system4">Sistem 4'lü</option><option value="system3">Sistem 3'lü</option><option value="custom">Özel</option>{Object.keys(customTemplates).length > 0 && <option value="load_custom" disabled>--- Kayıtlı Şablonlar ---</option>}{Object.keys(customTemplates).map(name => <option key={name} value={name}>{name}</option>)}</select>
+                        {selectedTemplateKey === 'custom' && (<div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm border-t pt-2">{Object.keys(settings).filter(k => k !== 'name' && k !== 'unit').map(key => (<label key={key}>{settingLabels[key] || key} ({settings.unit}): <input type="number" value={settings[key]} onChange={e=>handleSettingChange(key, e.target.value)} className="w-full p-1 border rounded"/></label>))}</div>)}
                     </div>
                      <div>
                         <h4 className="font-semibold text-sm mb-2">Özel Şablonlar</h4>
                          <div className="flex items-center gap-2 mb-3">
-                            <input type="text" placeholder="Yeni şablon adı..." value={newTemplateName} onChange={e => setNewTemplateName(e.target.value)} className="w-full p-2 border rounded-md text-sm dark:bg-slate-700 dark:border-slate-600" />
-                            <button onClick={handleSaveTemplate} className="px-4 py-2 border rounded text-sm bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/50 dark:hover:bg-blue-900 dark:border-blue-800 text-blue-700 dark:text-blue-300">Kaydet</button>
+                            <input type="text" placeholder="Yeni şablon adı..." value={newTemplateName} onChange={e => setNewTemplateName(e.target.value)} className="w-full p-2 border rounded-md text-sm" />
+                            <button onClick={handleSaveTemplate} className="px-4 py-2 border rounded text-sm bg-blue-50 hover:bg-blue-100 text-blue-700">Kaydet</button>
                         </div>
                         <h5 className="text-xs font-medium mb-1">Kayıtlı Şablonlar</h5>
-                        <div className="space-y-1">{Object.keys(customTemplates).length > 0 ? Object.keys(customTemplates).map(name => (<div key={name} className="flex justify-between items-center text-sm p-1 rounded hover:bg-slate-100 dark:hover:bg-slate-700"><span>{name}</span><div><button onClick={() => {setSelectedTemplateKey(name); setSettings(customTemplates[name])}} className="text-xs mr-2 text-blue-600 dark:text-blue-400">Yükle</button><button onClick={() => handleDeleteTemplate(name)} className="text-xs text-red-600 dark:text-red-400">Sil</button></div></div>)) : <p className="text-xs text-slate-500">Kayıtlı özel şablon yok.</p>}</div>
+                        <div className="space-y-1">{Object.keys(customTemplates).length > 0 ? Object.keys(customTemplates).map(name => (<div key={name} className="flex justify-between items-center text-sm p-1 rounded hover:bg-slate-100"><span>{name}</span><div><button onClick={() => {setSelectedTemplateKey(name); setSettings(customTemplates[name])}} className="text-xs mr-2 text-blue-600">Yükle</button><button onClick={() => handleDeleteTemplate(name)} className="text-xs text-red-600">Sil</button></div></div>)) : <p className="text-xs text-slate-500">Kayıtlı özel şablon yok.</p>}</div>
                     </div>
                 </div>
              </div>
 
             <div className="w-full flex flex-col gap-6">
-                <div className="bg-white dark:bg-slate-800 p-4 rounded-lg shadow-sm no-print">
-                     <div className="mb-4"><label className="text-sm font-medium block mb-1">PDF Dosya Adı</label><input type="text" value={pdfFileName} onChange={(e) => setPdfFileName(e.target.value)} className="w-full p-2 border rounded-md text-sm dark:bg-slate-700 dark:border-slate-600" placeholder="etiketler"/></div>
+                <div className="bg-white p-4 rounded-lg shadow-sm no-print">
+                     <div className="mb-4"><label className="text-sm font-medium block mb-1">PDF Dosya Adı</label><input type="text" value={pdfFileName} onChange={(e) => setPdfFileName(e.target.value)} className="w-full p-2 border rounded-md text-sm" placeholder="etiketler"/></div>
                     <div className="grid grid-cols-2 gap-4">
                         <button onClick={handlePrintAsPdf} className="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 shadow disabled:opacity-50" disabled={labelsToPrint.length === 0}>PDF Olarak İndir</button>
                         <button onClick={() => setSelectedBarcodes(new Set())} className="w-full bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600 shadow disabled:opacity-50" disabled={selectedBarcodes.size === 0}>Tüm Seçimleri Temizle</button>
