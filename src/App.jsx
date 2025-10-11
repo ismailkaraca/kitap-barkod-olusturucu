@@ -122,7 +122,7 @@ function App() {
   const [labelFields, setLabelFields] = React.useState(['itemcallnumber', 'title']);
   const [textAlign, setTextAlign] = React.useState('left');
   const [fontSize, setFontSize] = React.useState(6);
-  const [logo, setLogo] = React.useState('https://i.ibb.co/XrrDKnNW/ktblogo400.png');
+  const [logo, setLogo] = React.useState('/ktb-logo.png'); // <-- DEĞİŞTİ
   const [useMinistryLogo, setUseMinistryLogo] = React.useState(true);
   const [logoSize, setLogoSize] = React.useState(7);
 
@@ -258,7 +258,7 @@ function App() {
   const handleLocationSelect = (e) => { const loc = e.target.value; if (!loc) return; updateSelection(allData.filter(i => i.location === loc).map(i => i.barcode), true); e.target.value = ''; };
   const handleDeweySelect = (e) => { const prefix = e.target.value; if (!prefix) return; updateSelection(allData.filter(i => i.itemcallnumber && String(i.itemcallnumber).startsWith(prefix)).map(i => i.barcode), true); e.target.value = ''; };
   const handleLogoChange = (e) => { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = (ev) => { setLogo(ev.target.result); setUseMinistryLogo(false); }; reader.readAsDataURL(file); }};
-  const handleMinistryLogoToggle = (e) => { setUseMinistryLogo(e.target.checked); setLogo(e.target.checked ? 'https://i.ibb.co/XrrDKnNW/ktblogo400.png' : null); };
+  const handleMinistryLogoToggle = (e) => { setUseMinistryLogo(e.target.checked); setLogo(e.target.checked ? '/ktb-logo.png' : null); }; // <-- DEĞİŞTİ
 
   // --- RENDER Fonksiyonları ---
   const renderSingleLabel = (data, key) => (
