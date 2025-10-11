@@ -1,17 +1,14 @@
 import React from 'react';
 
 // Gerekli kütüphaneleri yüklemek için script etiketleri ekliyoruz.
+const tailwindScript = document.createElement('script');
+tailwindScript.src = "https://cdn.tailwindcss.com";
+document.head.appendChild(tailwindScript);
+
 const papaParseScript = document.createElement('script');
 papaParseScript.src = "https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js";
 papaParseScript.async = true;
 document.head.appendChild(papaParseScript);
-
-
-
-// Gerekli kütüphaneleri yüklemek için script etiketleri ekliyoruz.
-const tailwindScript = document.createElement('script');
-tailwindScript.src = "https://cdn.tailwindcss.com";
-document.head.appendChild(tailwindScript);
 
 const sheetJsScript = document.createElement('script');
 sheetJsScript.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
@@ -305,7 +302,7 @@ function App() {
       <style>{`.no-print { display: block; } #print-area { display: block; } @media print { body * { visibility: hidden; } .no-print { display: none; } #print-area, #print-area * { visibility: visible; } #print-area { position: absolute; left: 0; top: 0; width: 100% !important; height: 100% !important; padding: 0 !important; margin: 0 !important; box-shadow: none !important; border: none !important; } }`}</style>
       <div className="bg-slate-100 dark:bg-slate-900 min-h-screen text-slate-800 dark:text-slate-200 font-sans p-4 sm:p-6 lg:p-8">
         <div className="max-w-screen-2xl mx-auto">
-           <header className="mb-8 no-print flex justify-between items-center">
+          <header className="mb-8 no-print flex justify-between items-center">
                 <div>
                     <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Kitap Barkod Oluşturucu</h1>
                     <p className="text-slate-600 dark:text-slate-400 mt-1">Veri yükleyin, barkod seçin ve etiket şablonunuzu oluşturun.</p>
@@ -342,9 +339,9 @@ function App() {
                         </div>
                     </div>
                 </div>
-                 <div className="flex flex-wrap items-center justify-between gap-y-2 gap-x-4 my-4">
-                   <div className="flex items-center gap-2"><button onClick={handleSelectAllFiltered} className="px-3 py-1 border rounded text-sm bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600 dark:border-slate-600">Tümünü Seç</button><button onClick={handleDeselectAllFiltered} className="px-3 py-1 border rounded text-sm bg-red-50 text-red-700 hover:bg-red-100 dark:bg-red-900/50 dark:text-red-300 dark:hover:bg-red-900 dark:border-red-800">Tüm Seçimi Kaldır</button></div>
-                   <div className="flex items-center gap-2"><button onClick={handleSelectPage} className="px-3 py-1 border rounded text-sm bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600 dark:border-slate-600">Sayfayı Seç</button><button onClick={handleDeselectPage} className="px-3 py-1 border rounded text-sm bg-red-50 text-red-700 hover:bg-red-100 dark:bg-red-900/50 dark:text-red-300 dark:hover:bg-red-900 dark:border-red-800">Sayfa Seçimini Kaldır</button></div>
+                <div className="flex flex-wrap items-center justify-between gap-y-2 gap-x-4 my-4">
+                  <div className="flex items-center gap-2"><button onClick={handleSelectAllFiltered} className="px-3 py-1 border rounded text-sm bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600 dark:border-slate-600">Tümünü Seç</button><button onClick={handleDeselectAllFiltered} className="px-3 py-1 border rounded text-sm bg-red-50 text-red-700 hover:bg-red-100 dark:bg-red-900/50 dark:text-red-300 dark:hover:bg-red-900 dark:border-red-800">Tüm Seçimi Kaldır</button></div>
+                  <div className="flex items-center gap-2"><button onClick={handleSelectPage} className="px-3 py-1 border rounded text-sm bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600 dark:border-slate-600">Sayfayı Seç</button><button onClick={handleDeselectPage} className="px-3 py-1 border rounded text-sm bg-red-50 text-red-700 hover:bg-red-100 dark:bg-red-900/50 dark:text-red-300 dark:hover:bg-red-900 dark:border-red-800">Sayfa Seçimini Kaldır</button></div>
                 </div>
                 <input type="text" placeholder="Veriler içinde ara..." value={searchTerm} onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }} className="w-full p-2 border rounded-md text-sm mb-3 dark:bg-slate-700 dark:border-slate-600" />
                 <div className="overflow-x-auto"><table className="w-full text-left text-sm"><thead><tr className="bg-slate-50 dark:bg-slate-700">{['', ...tableHeaders].map((header, idx) => (<th key={idx} className="p-2 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-600 select-none" onClick={() => idx > 0 && requestSort(header.key)}>{header.label || ''}{idx > 0 && sortConfig.key === header.key && <span className="ml-1 text-xs">{sortConfig.direction === 'ascending' ? '▲' : '▼'}</span>}</th>))}</tr></thead><tbody>{paginatedData.map(item => (<tr key={item.barcode} className="border-b dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50"><td className="p-2"><input type="checkbox" checked={selectedBarcodes.has(item.barcode)} onChange={(e) => updateSelection([item.barcode], e.target.checked)} className="dark:bg-slate-900 dark:border-slate-600"/></td>{tableHeaders.map(header => (<td key={`${item.barcode}-${header.key}`} className={`p-2 ${header.key === 'barcode' ? 'font-mono' : ''}`}>{item[header.key]}</td>))}</tr>))}</tbody></table></div>
@@ -451,6 +448,4 @@ function App() {
 }
 
 export default App;
-
-
 
