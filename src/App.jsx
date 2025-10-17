@@ -433,6 +433,13 @@ function App() {
                     </div>
                   </div>
                 </main>
+
+                   <footer className="text-center py-8">
+                    <a href="https://ismailkaraca.com.tr/qr.php" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 rounded-lg bg-white px-4 py-2 text-xs text-gray-700 shadow-lg transition-shadow hover:shadow-xl">
+                        <img src="https://www.ismailkaraca.com.tr/wp-content/uploads/2025/03/ismail1002025.svg" alt="İsmail Karaca Logo" className="h-8 w-8 rounded-full" />
+                        <span className="font-medium">Bu uygulama İsmail Karaca tarafından geliştirilmiştir. Görüş ve önerilerinizi iletmek için tıklayınız.</span>
+                    </a>
+                </footer>
             </div>
           </div>
         </div>
